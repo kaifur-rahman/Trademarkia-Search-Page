@@ -8,15 +8,21 @@ import { colorScheme } from "../../constants/colorScheme";
 
 function Searchbox() {
   return (
-    <Grid container>
+    <Grid
+      container
+      sx={{
+        justifyContent: "flex-start",
+        alignItems: "center",
+      }}
+    >
       <Grid item xs={10} md={10}>
         <TextField
           id="searchbar"
           variant="outlined"
           size="small"
+          fullWidth
           placeholder="Search Trademark Here e.g. Mickey Mouse"
           sx={{
-            width: "100%",
             "& .MuiOutlinedInput-root": {
               borderRadius: "0.5rem",
               "& fieldset": {
