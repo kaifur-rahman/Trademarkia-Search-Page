@@ -1,10 +1,9 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import SortIcon from "@mui/icons-material/Sort";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import ShareIcon from "@mui/icons-material/Share";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import ResponsiveFilterNav from "../filters/ResponsiveFilterNav";
 
 import { colorScheme } from "../../constants/colorScheme";
 
@@ -39,33 +38,26 @@ function ResultHeader() {
         }}
       >
         {/* filter */}
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{
-            borderColor: "#C8C8C8",
-            color: colorScheme.light,
-            mr: "0.5rem",
-          }}
-          startIcon={<FilterAltIcon sx={{ color: colorScheme.light }} />}
-        >
-          Filter
-        </Button>
+        <ResponsiveFilterNav />
         {/* share and sort  */}
         <Box>
           {/* share */}
           <IconButton
             size="small"
             aria-label="copy"
-            sx={{ border: "1px solid #C8C8C8", color: "#000000", mr: "0.5rem" }}
+            sx={{
+              border: "1px solid #C8C8C8",
+              color: colorScheme.light,
+              mr: "0.5rem",
+            }}
           >
-            <ShareIcon />
+            <ShareOutlinedIcon />
           </IconButton>
           {/* sort */}
           <IconButton
             size="small"
             aria-label="sort"
-            sx={{ border: "1px solid #C8C8C8", color: "#000000" }}
+            sx={{ border: "1px solid #C8C8C8", color: colorScheme.light }}
           >
             <SortIcon />
           </IconButton>

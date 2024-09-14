@@ -23,12 +23,12 @@ function Details({ data }) {
         <Typography
           variant="body2"
           gutterBottom
-          sx={{ fontSize: "0.875rem", fontWeight: "100" }}
+          sx={{ fontSize: "0.875rem", fontWeight: "regular", mt: "-0.5rem" }}
         >
           Facebook Inc.
         </Typography>
       </Box>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", mt: "2rem" }}>
         <Typography
           variant="h6"
           gutterBottom
@@ -39,7 +39,7 @@ function Details({ data }) {
         <Typography
           variant="body2"
           gutterBottom
-          sx={{ fontSize: "0.75rem", fontWeight: 100 }}
+          sx={{ fontSize: "0.7rem", fontWeight: "regular", mt: "-0.5rem" }}
         >
           23 Mar 1981
         </Typography>

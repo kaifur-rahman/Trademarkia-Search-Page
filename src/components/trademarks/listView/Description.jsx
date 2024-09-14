@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import groupLogo from "../../../assets/group.png"; // Assuming the image is available
+import groupLogo from "../../../assets/group.png";
 
 function Description({ data }) {
   return (
@@ -34,7 +34,9 @@ function Description({ data }) {
       </Box>
 
       {/* Icons and class description in a row */}
-      <Box sx={{ display: "flex", gap: "1rem", alignItems: "center", mt: 1 }}>
+      <Box
+        sx={{ display: "flex", gap: "1rem", alignItems: "center", mt: "1rem" }}
+      >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <img src={groupLogo} alt="Class Logo" style={{ height: "1rem" }} />
           <Typography

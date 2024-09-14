@@ -97,9 +97,11 @@ const rows = [
   { id: "5", mark: "m1", details: "d1", status: "s1", description: "d1" },
   { id: "6", mark: "m1", details: "d1", status: "s1", description: "d1" },
   { id: "7", mark: "m1", details: "d1", status: "s1", description: "d1" },
+  { id: "4", mark: "m1", details: "d1", status: "s1", description: "d1" },
+  { id: "5", mark: "m1", details: "d1", status: "s1", description: "d1" },
+  { id: "6", mark: "m1", details: "d1", status: "s1", description: "d1" },
+  { id: "7", mark: "m1", details: "d1", status: "s1", description: "d1" },
 ];
-
-const paginationModel = { page: 0, pageSize: 5 };
 
 export default function ListView() {
   return (
@@ -110,7 +112,11 @@ export default function ListView() {
         disableColumnMenu
         disableSelectionOnClick
         getRowHeight={() => 140}
-        initialState={{ pagination: { paginationModel } }}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 10 }, // Default page size set to 10
+          },
+        }}
         pageSizeOptions={[5, 10]}
         sx={{
           border: 0,

@@ -1,4 +1,7 @@
 import Box from "@mui/material/Box";
+import Status from "./Status";
+import OLA from "./OLA/OLA";
+import Display from "./Display";
 
 function Filter() {
   return (
@@ -6,9 +9,14 @@ function Filter() {
       sx={{
         height: "100%",
         width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <h6>Filters here</h6>
+      <Status />
+      <OLA />
+      <Display />
     </Box>
   );
 }

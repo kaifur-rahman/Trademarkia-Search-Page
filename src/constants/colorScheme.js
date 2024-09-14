@@ -4,6 +4,7 @@ const colorScheme = {
   orangeLight: "#FEF7F0",
   green: "#41B65C",
   red: "#EC4A4A",
+  blue: "#4380EC",
 };
 
 export { colorScheme };

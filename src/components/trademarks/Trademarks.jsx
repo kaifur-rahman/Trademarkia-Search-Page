@@ -7,7 +7,7 @@ import Filter from "../filters/Filter";
 function Trademarks() {
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
-      <Grid container>
+      <Grid container spacing={2}>
         {/* trademarks */}
         <Grid item xs={12} md={9}>
           <SearchSuggestion />

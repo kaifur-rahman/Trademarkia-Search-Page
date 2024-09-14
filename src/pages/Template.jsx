@@ -1,9 +1,10 @@
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
+import Container from "@mui/material/Container";
 import Navbar from "../components/navbar/Navbar";
 import ResultHeader from "../components/resultHeader/ResultHeader";
 import Trademarks from "../components/trademarks/Trademarks";
+
 function Template() {
   return (
     <Box>

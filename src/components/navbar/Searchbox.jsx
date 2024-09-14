@@ -26,7 +26,7 @@ function Searchbox() {
             "& .MuiOutlinedInput-root": {
               borderRadius: "0.5rem",
               "& fieldset": {
-                borderColor: colorScheme.light, //default
+                borderColor: "#636363", //default
               },
               "&:hover fieldset": {
                 borderColor: "#000000", //on hover
@@ -56,6 +56,8 @@ function Searchbox() {
             borderRadius: "12px",
             display: { xs: "none", md: "block" },
             fontSize: "0.8rem",
+            height: "2.7rem",
+            width: "7rem",
           }}
         >
           Search

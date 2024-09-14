@@ -21,13 +21,23 @@ export default function Navbar() {
           columnGap={2}
         >
           {/* logo item here */}
-          <Grid item xs={12} sm={12} md={2}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={2}
+            sx={{
+              p: "0.5rem",
+              display: "flex",
+
+              justifyContent: { xs: "flex-start", md: "flex-end" },
+            }}
+          >
             <Box
               sx={{
                 maxHeight: "1.5rem",
                 maxWidth: "10rem",
-                ml: "5rem",
-                mt: { xs: "0.5rem", md: "0" },
+                pt: { xs: "1rem", md: 0 },
               }}
             >
               <img src={logo} style={{ width: "100%" }}></img>
