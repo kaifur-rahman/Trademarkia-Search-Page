@@ -1,13 +1,19 @@
-import * as React from "react";
-import PropTypes from "prop-types";
+import { useContext, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import CheckboxLabels from "./Checkbox";
+import { SearchContext } from "../../contexts/SearchContext";
+import CircularProgress from "@mui/material/CircularProgress";
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
+function CustomTabPanel({ children, value, index, ...other }) {
   return (
     <div
       role="tabpanel"
@@ -21,21 +27,10 @@ function CustomTabPanel(props) {
   );
 }
 
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 export default function OLATabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const { attorneyList, ownerList, lawFirmList, loading } =
+    useContext(SearchContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -44,56 +39,91 @@ export default function OLATabs() {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        {/* tabs */}
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="filter tabs"
           TabIndicatorProps={{
-            style: {
-              backgroundColor: "#000000", // Change the active tab underline color to black
-              color: "#000000",
-            },
+            style: { backgroundColor: "#000", color: "#000" },
           }}
           sx={{
-            "& .Mui-selected": {
-              fontWeight: "bold", // Make the selected tab label bold
-              color: "#000000!important",
-            },
+            "& .Mui-selected": { fontWeight: "bold", color: "#000!important" },
           }}
         >
-          <Tab
-            label="Owners"
-            sx={{ fontSize: "0.75rem", textTransform: "none" }}
-            {...a11yProps(0)}
-          />
+          <Tab label="Owners" sx={{ fontSize: "0.75rem" }} {...a11yProps(0)} />
           <Tab
             label="Law Firms"
-            sx={{ fontSize: "0.75rem", textTransform: "none" }}
+            sx={{ fontSize: "0.75rem" }}
             {...a11yProps(1)}
           />
           <Tab
             label="Attorneys"
-            sx={{ fontSize: "0.75rem", textTransform: "none" }}
+            sx={{ fontSize: "0.75rem" }}
             {...a11yProps(2)}
           />
         </Tabs>
       </Box>
 
-      {/* tab content */}
+      {/* Owners Tab */}
       <CustomTabPanel value={value} index={0}>
         <Box sx={{ height: "10rem", overflowY: "auto" }}>
-          <CheckboxLabels />
+          {loading ? (
+            <Box
+              sx={{
+                height: "100%",
+                weight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <CheckboxLabels data={ownerList} />
+          )}
         </Box>
       </CustomTabPanel>
+
+      {/* Law Firms Tab */}
       <CustomTabPanel value={value} index={1}>
         <Box sx={{ height: "10rem", overflowY: "auto" }}>
-          <CheckboxLabels />
+          {loading ? (
+            <Box
+              sx={{
+                height: "100%",
+                weight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <CheckboxLabels data={lawFirmList} />
+          )}
         </Box>
       </CustomTabPanel>
+
+      {/* Attorneys Tab */}
       <CustomTabPanel value={value} index={2}>
         <Box sx={{ height: "10rem", overflowY: "auto" }}>
-          <CheckboxLabels />
+          {loading ? (
+            <Box
+              sx={{
+                height: "100%",
+                weight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <CheckboxLabels data={attorneyList} />
+          )}
         </Box>
       </CustomTabPanel>
     </Box>

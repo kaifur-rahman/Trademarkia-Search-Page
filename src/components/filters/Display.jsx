@@ -1,5 +1,5 @@
-import Box from "@mui/material/Box";
 import { useState } from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -10,14 +10,13 @@ function Display() {
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
-    console.log(newAlignment);
   };
 
   return (
     <Box
       sx={{
         backgroundColor: "#ffffff",
-        height: "8rem",
+        height: "10rem",
         mt: "1.5rem",
         width: { xs: "90%", md: "100%" },
         mb: "1rem",
@@ -34,7 +33,12 @@ function Display() {
       >
         Display
       </Typography>
-      <Box sx={{ mt: "1rem", width: "100%" }}>
+      <Box
+        sx={{
+          mt: "2rem",
+          width: "100%",
+        }}
+      >
         <ToggleButtonGroup
           value={alignment}
           exclusive

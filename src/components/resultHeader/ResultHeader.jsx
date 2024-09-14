@@ -1,13 +1,17 @@
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import SortIcon from "@mui/icons-material/Sort";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import ResponsiveFilterNav from "../filters/ResponsiveFilterNav";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import { colorScheme } from "../../constants/colorScheme";
+import { SearchContext } from "../contexts/SearchContext";
 
 function ResultHeader() {
+  const { totalCount, filters, loading } = useContext(SearchContext);
+
   return (
     <Box
       sx={{
@@ -21,15 +25,27 @@ function ResultHeader() {
     >
       {/* Result count */}
       <Box>
-        <Typography
-          variant="body2"
-          gutterBottom
-          sx={{ fontWeight: "700", color: "#4B5563" }}
-        >
-          About 30,000 Trademarks found for “*”
-        </Typography>
+        {loading ? (
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <CircularProgress size={20} sx={{ marginRight: "0.5rem" }} />
+            <Typography variant="body2" sx={{ color: "#4B5563" }}>
+              Loading results...
+            </Typography>
+          </Box>
+        ) : (
+          <Typography
+            variant="body2"
+            gutterBottom
+            sx={{ fontWeight: "700", color: "#4B5563" }}
+          >
+            {`About ${totalCount.toLocaleString()} Trademarks found for “${
+              filters.input_query
+            }”`}
+          </Typography>
+        )}
       </Box>
-      {/* result tools */}
+
+      {/* Result tools */}
       <Box
         sx={{
           display: "flex",
@@ -37,11 +53,11 @@ function ResultHeader() {
           width: { xs: "100%", md: "auto" },
         }}
       >
-        {/* filter */}
+        {/* Filter */}
         <ResponsiveFilterNav />
-        {/* share and sort  */}
+        {/* Share and Sort */}
         <Box>
-          {/* share */}
+          {/* Share */}
           <IconButton
             size="small"
             aria-label="copy"
@@ -53,7 +69,7 @@ function ResultHeader() {
           >
             <ShareOutlinedIcon />
           </IconButton>
-          {/* sort */}
+          {/* Sort */}
           <IconButton
             size="small"
             aria-label="sort"

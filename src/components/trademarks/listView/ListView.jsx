@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Mark from "./Mark";
@@ -5,6 +6,8 @@ import Details from "./Details";
 import Status from "./Status";
 import Box from "@mui/material/Box";
 import Description from "./Description";
+import CircularProgress from "@mui/material/CircularProgress";
+import { SearchContext } from "../../contexts/SearchContext";
 
 const columns = [
   {
@@ -43,7 +46,7 @@ const columns = [
           alignItems: "center",
         }}
       >
-        <Details data={params} />
+        <Details data={params.row.details} />
       </Box>
     ),
   },
@@ -63,7 +66,7 @@ const columns = [
           alignItems: "center",
         }}
       >
-        <Status data={params} />
+        <Status data={params.value} />
       </Box>
     ),
   },
@@ -83,78 +86,105 @@ const columns = [
           alignItems: "center",
         }}
       >
-        <Description data={params} />
+        <Description data={params.value} />
       </Box>
     ),
   },
 ];
 
-const rows = [
-  { id: "1", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "2", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "3", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "4", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "5", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "6", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "7", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "4", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "5", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "6", mark: "m1", details: "d1", status: "s1", description: "d1" },
-  { id: "7", mark: "m1", details: "d1", status: "s1", description: "d1" },
-];
-
 export default function ListView() {
+  const { data, loading } = useContext(SearchContext);
+
+  // Handle the case where the data is still loading
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Map the API data to the rows for the DataGrid
+  const rows = data.map((item, index) => ({
+    id: index + 1, // Assign an id to each row
+    mark: item._source.mark_identification || "N/A", // Mark name
+    details: {
+      mark_name: item._source.mark_identification,
+      owner_name: item._source.current_owner,
+      registration_number: item._source.registration_number,
+      registration_date: new Date(
+        item._source.registration_date * 1000
+      ).toLocaleDateString(), // Convert timestamp to date
+    }, // Pass relevant details for the Details component
+    status: {
+      status: item._source.status_type || "N/A", // Status of the trademark
+      registration_date: new Date(
+        item._source.registration_date * 1000
+      ).toLocaleDateString(), // Registration date
+      renewal_date: new Date(
+        item._source.renewal_date * 1000
+      ).toLocaleDateString(), // Renewal date
+    },
+    description: {
+      description:
+        item._source.mark_description_description?.join(", ") || "N/A", // Description array
+      classCodes: item._source.class_codes || [], // Class codes array
+    },
+  }));
+
   return (
     <Paper sx={{ width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
         disableColumnMenu
+        hideFooter
         disableSelectionOnClick
         getRowHeight={() => 140}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 10 }, // Default page size set to 10
-          },
-        }}
-        pageSizeOptions={[5, 10]}
         sx={{
           border: 0,
           "& .MuiDataGrid-row": {
-            cursor: "pointer", // Make the entire row clickable
+            cursor: "pointer",
             "&:hover": {
-              backgroundColor: "#f5f5f5", // Change background color on hover
+              backgroundColor: "#f5f5f5",
             },
             "& .MuiDataGrid-cell:focus": {
-              outline: "none", // Remove the focus outline from individual cells
+              outline: "none",
             },
             "& .MuiDataGrid-cell": {
-              pointerEvents: "none", // Disable clicking on individual cells
-              borderRight: "none", // Remove right borders on cells
+              pointerEvents: "none",
+              borderRight: "none",
               border: "none",
               borderBottom: "none",
             },
           },
           "& .MuiDataGrid-columnHeaders": {
-            borderRight: "none", // Remove right border of column headers
+            borderRight: "none",
             fontWeight: 600,
           },
           "& .MuiDataGrid-columnSeparator": {
-            display: "none", // Remove the column separators
+            display: "none",
           },
-
           "& .MuiDataGrid-columnHeaderTitle": {
-            fontWeight: 600, // Makes individual column header titles bold
+            fontWeight: 600,
           },
           "& .MuiDataGrid-root": {
-            border: "none", // Remove outer table borders
+            border: "none",
           },
           "& .MuiDataGrid-viewport": {
-            border: "none", // Remove the border around the table content
+            border: "none",
           },
           "& .MuiDataGrid-columnHeadersInner": {
-            borderBottom: "none", // Remove any bottom border that could remain
+            borderBottom: "none",
           },
+          mb: "2rem",
         }}
       />
     </Paper>

@@ -1,20 +1,35 @@
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import { colorScheme } from "../../constants/colorScheme";
+import { SearchContext } from "../contexts/SearchContext";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 function Status() {
-  const handleClick = () => {
-    console.info("You clicked the Chip.");
+  const { filters, updateFilters } = useContext(SearchContext);
+
+  const handleClick = (status) => {
+    if (status === "all") {
+      updateFilters("status", []);
+    } else {
+      updateFilters("status", [status]);
+    }
+  };
+
+  const isActive = (status) => {
+    if (status === "all") {
+      return filters.status.length === 0;
+    }
+    return filters.status.includes(status);
   };
 
   return (
     <Box
       sx={{
         backgroundColor: "#ffffff",
-        height: "10rem",
+        height: "auto",
         mt: { xs: "2rem", md: "4rem" },
         width: { xs: "90%", md: "100%" },
         boxShadow:
@@ -47,10 +62,11 @@ function Status() {
             justifyContent: "center",
           }}
         >
+          {/* All Status Chip */}
           <Chip
             label="All"
-            variant="outlined"
-            onClick={handleClick}
+            variant={isActive("all") ? "filled" : "outlined"}
+            onClick={() => handleClick("all")}
             sx={{
               borderColor: colorScheme.light,
               borderRadius: "0.75rem",
@@ -58,6 +74,7 @@ function Status() {
               fontSize: "0.75rem",
             }}
           />
+          {/* Registered Status Chip */}
           <Chip
             icon={
               <FiberManualRecordIcon
@@ -68,8 +85,8 @@ function Status() {
               />
             }
             label="Registered"
-            variant="outlined"
-            onClick={handleClick}
+            variant={isActive("registered") ? "filled" : "outlined"}
+            onClick={() => handleClick("registered")}
             sx={{
               borderColor: colorScheme.light,
               fontWeight: "600",
@@ -77,6 +94,7 @@ function Status() {
               fontSize: "0.75rem",
             }}
           />
+          {/* Pending Status Chip */}
           <Chip
             label="Pending"
             icon={
@@ -87,8 +105,8 @@ function Status() {
                 }}
               />
             }
-            variant="outlined"
-            onClick={handleClick}
+            variant={isActive("pending") ? "filled" : "outlined"}
+            onClick={() => handleClick("pending")}
             sx={{
               borderColor: colorScheme.light,
               borderRadius: "0.75rem",
@@ -96,6 +114,7 @@ function Status() {
               fontSize: "0.75rem",
             }}
           />
+          {/* Abandoned Status Chip */}
           <Chip
             label="Abandoned"
             icon={
@@ -106,8 +125,8 @@ function Status() {
                 }}
               />
             }
-            variant="outlined"
-            onClick={handleClick}
+            variant={isActive("abandoned") ? "filled" : "outlined"}
+            onClick={() => handleClick("abandoned")}
             sx={{
               borderColor: colorScheme.light,
               borderRadius: "0.75rem",
@@ -115,6 +134,7 @@ function Status() {
               fontSize: "0.75rem",
             }}
           />
+          {/* Others Status Chip */}
           <Chip
             label="Others"
             icon={
@@ -125,8 +145,8 @@ function Status() {
                 }}
               />
             }
-            variant="outlined"
-            onClick={handleClick}
+            variant={isActive("others") ? "filled" : "outlined"}
+            onClick={() => handleClick("others")}
             sx={{
               borderColor: colorScheme.light,
               borderRadius: "0.75rem",

@@ -15,7 +15,6 @@ function Template() {
         <ResultHeader />
       </Container>
       <Divider />
-      {/* main content */}
       <Container sx={{ mt: "1rem" }}>
         <Trademarks />
       </Container>
