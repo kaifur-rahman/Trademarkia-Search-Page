@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
-
 import { colorScheme } from "../../constants/colorScheme";
 import { SearchContext } from "../contexts/SearchContext";
 import debounce from "lodash/debounce";
@@ -24,7 +23,7 @@ function Searchbox() {
   const debouncedUpdateQuery = useCallback(
     debounce((newQuery) => {
       updateFilters("input_query", newQuery, true); // This will reset other filters
-    }, 500),
+    }, 1500),
     []
   );
 
