@@ -18,6 +18,7 @@ export const SearchProvider = ({ children }) => {
   const [ownerList, setOwnerList] = useState([]);
   const [lawFirmList, setLawFirmList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const API_URL = "https://vit-tm-task.api.trademarkia.app/api/v3/us";
 
@@ -32,6 +33,7 @@ export const SearchProvider = ({ children }) => {
   // Function to make the API call based on filters
   const fetchData = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.post(
         API_URL,
@@ -44,20 +46,41 @@ export const SearchProvider = ({ children }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*", // CORS-related headers
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json, text/plain, */*",
           },
         }
       );
-      setData(response.data.body.hits.hits);
-      const aggregations = response.data.body.aggregations;
-      setTotalCount(response.data.body.hits.total.value);
-      if (aggregations) {
-        setOwnerList(aggregations.current_owners.buckets || []);
-        setLawFirmList(aggregations.law_firms.buckets || []);
-        setAttorneyList(aggregations.attorneys.buckets || []);
+
+      // Check if response status is 404 or no results found
+      if (response.status === 404 || response.data.msg === "not found") {
+        setError("No results found");
+        setData([]);
+        setTotalCount(0);
+        setOwnerList([]);
+        setLawFirmList([]);
+        setAttorneyList([]);
+      } else {
+        setData(response.data.body.hits.hits);
+        const aggregations = response.data.body.aggregations;
+        setTotalCount(response.data.body.hits.total.value);
+        if (aggregations) {
+          setOwnerList(aggregations.current_owners.buckets || []);
+          setLawFirmList(aggregations.law_firms.buckets || []);
+          setAttorneyList(aggregations.attorneys.buckets || []);
+        }
       }
     } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("No results found.");
+        setData([]); // Ensure data is reset
+        setTotalCount(0);
+        setOwnerList([]);
+        setLawFirmList([]);
+        setAttorneyList([]);
+      } else {
+        setError("An error occurred while fetching data.");
+      }
       console.error("Error fetching data: ", error);
     } finally {
       setLoading(false);
@@ -69,6 +92,19 @@ export const SearchProvider = ({ children }) => {
     fetchData();
   }, [filters]);
 
+  // Update document title dynamically based on search results and errors
+  useEffect(() => {
+    if (error) {
+      document.title = `No results found for "${filters.input_query}" | Trademarkia`;
+    } else if (totalCount > 0) {
+      document.title = `${totalCount.toLocaleString()} Trademark results found for "${
+        filters.input_query
+      }" | Trademarkia`;
+    } else {
+      document.title = `Search | Trademarkia`;
+    }
+  }, [filters.input_query, totalCount, error]);
+
   return (
     <SearchContext.Provider
       value={{
@@ -77,6 +113,7 @@ export const SearchProvider = ({ children }) => {
         data,
         totalCount,
         loading,
+        error,
         ownerList,
         lawFirmList,
         attorneyList,

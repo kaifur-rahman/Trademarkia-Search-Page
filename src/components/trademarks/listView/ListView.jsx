@@ -93,7 +93,7 @@ const columns = [
 ];
 
 export default function ListView() {
-  const { data, loading } = useContext(SearchContext);
+  const { data, loading, error } = useContext(SearchContext);
 
   // Handle the case where the data is still loading
   if (loading) {
@@ -107,6 +107,20 @@ export default function ListView() {
         }}
       >
         <CircularProgress />
+      </Box>
+    );
+  }
+  if (error) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <p>{error}</p>
       </Box>
     );
   }

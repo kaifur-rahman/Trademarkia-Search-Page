@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -20,7 +21,16 @@ const generateSuggestions = (query = "") => {
 };
 
 function SearchSuggestion({ query }) {
-  const { updateFilters } = useContext(SearchContext);
+  const [noResult, setNoResult] = useState(false);
+  const { updateFilters, error, loading } = useContext(SearchContext);
+
+  useEffect(() => {
+    if (error === "No results found.") {
+      setNoResult(true);
+    } else {
+      setNoResult(false);
+    }
+  }, [error]);
 
   // Handle when a suggestion is clicked
   const handleSuggestionClick = (newQuery) => {
@@ -40,35 +50,47 @@ function SearchSuggestion({ query }) {
         mb: "1rem",
         alignItems: "center",
         overflowX: "auto",
-        height: "3rem",
+        height: { xs: "3.5rem", md: "3rem" },
       }}
     >
-      {/* Text */}
-      <Typography variant="body2" gutterBottom sx={{ color: "#4B5563" }}>
-        Also try searching for:
-      </Typography>
-
-      {/* Suggestions */}
-      {suggestions.map((suggestion, index) => (
-        <Button
-          key={index}
-          size="small"
-          variant="contained"
-          onClick={() => handleSuggestionClick(suggestion)}
-          sx={{
-            backgroundColor: colorScheme.orangeLight,
-            color: colorScheme.orangeDark,
-            borderColor: colorScheme.orangeDark,
-            border: "1px solid",
-            textTransform: "none",
-            borderRadius: "10px",
-            minWidth: "4rem",
-            height: "2rem",
-          }}
+      {noResult ? (
+        <Typography
+          variant="body2"
+          gutterBottom
+          sx={{ color: "#000000", fontWeight: "bold", fontSize: "1.2rem" }}
         >
-          {suggestion}
-        </Button>
-      ))}
+          {`The "${query}" Trademark may be available.`}
+        </Typography>
+      ) : (
+        <>
+          <Typography variant="body2" gutterBottom sx={{ color: "#4B5563" }}>
+            Also try searching for:
+          </Typography>
+
+          {/* Suggestions - Only show if loading is false */}
+          {!loading &&
+            suggestions.map((suggestion, index) => (
+              <Button
+                key={index}
+                size="small"
+                variant="contained"
+                onClick={() => handleSuggestionClick(suggestion)}
+                sx={{
+                  backgroundColor: colorScheme.orangeLight,
+                  color: colorScheme.orangeDark,
+                  borderColor: colorScheme.orangeDark,
+                  border: "1px solid",
+                  textTransform: "none",
+                  borderRadius: "10px",
+                  minWidth: "4rem",
+                  height: "2rem",
+                }}
+              >
+                {suggestion}
+              </Button>
+            ))}
+        </>
+      )}
     </Box>
   );
 }
