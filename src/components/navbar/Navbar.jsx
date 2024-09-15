@@ -1,8 +1,8 @@
-import AppBar from "@mui/material/AppBar";
+import Searchbox from "./Searchbox";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import logo from "../../assets/logo.png";
-import Searchbox from "./Searchbox";
+import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 
 export default function Navbar() {

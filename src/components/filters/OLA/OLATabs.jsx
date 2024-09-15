@@ -29,7 +29,7 @@ function CustomTabPanel({ children, value, index, ...other }) {
 
 export default function OLATabs() {
   const [value, setValue] = useState(0);
-  const { attorneyList, ownerList, lawFirmList, loading } =
+  const { loading, ownerList, lawFirmList, attorneyList } =
     useContext(SearchContext);
 
   const handleChange = (event, newValue) => {
@@ -71,7 +71,6 @@ export default function OLATabs() {
             <Box
               sx={{
                 height: "100%",
-                weight: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -80,7 +79,7 @@ export default function OLATabs() {
               <CircularProgress />
             </Box>
           ) : (
-            <CheckboxLabels data={ownerList} />
+            <CheckboxLabels filterKey="owners" data={ownerList} />
           )}
         </Box>
       </CustomTabPanel>
@@ -92,7 +91,6 @@ export default function OLATabs() {
             <Box
               sx={{
                 height: "100%",
-                weight: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -101,7 +99,7 @@ export default function OLATabs() {
               <CircularProgress />
             </Box>
           ) : (
-            <CheckboxLabels data={lawFirmList} />
+            <CheckboxLabels filterKey="law_firms" data={lawFirmList} />
           )}
         </Box>
       </CustomTabPanel>
@@ -113,7 +111,6 @@ export default function OLATabs() {
             <Box
               sx={{
                 height: "100%",
-                weight: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -122,7 +119,7 @@ export default function OLATabs() {
               <CircularProgress />
             </Box>
           ) : (
-            <CheckboxLabels data={attorneyList} />
+            <CheckboxLabels filterKey="attorneys" data={attorneyList} />
           )}
         </Box>
       </CustomTabPanel>

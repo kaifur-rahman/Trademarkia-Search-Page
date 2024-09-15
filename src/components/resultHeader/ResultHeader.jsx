@@ -1,20 +1,39 @@
 import { useContext } from "react";
 import Box from "@mui/material/Box";
 import SortIcon from "@mui/icons-material/Sort";
-import IconButton from "@mui/material/IconButton";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import { SearchContext } from "../contexts/SearchContext";
+import IconButton from "@mui/material/IconButton";
 import { colorScheme } from "../../constants/colorScheme";
+import { SearchContext } from "../contexts/SearchContext";
 import ResponsiveFilterNav from "../filters/ResponsiveFilterNav";
+import CircularProgress from "@mui/material/CircularProgress";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+
 export default function ResultHeader() {
   const { totalCount, filters, loading, error } = useContext(SearchContext);
+  const handleShare = () => {
+    const shareData = {
+      title: "Trademarkia Search Results",
+      text: `Check out the search results for "${filters.input_query}" on Trademarkia`,
+      url: window.location.href, // Current URL with search query parameters
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => {})
+        .catch((error) => {
+          console.error("Error sharing:", error);
+        });
+    } else {
+      alert("Sharing is not supported on your device or browser.");
+    }
+  };
 
   return (
     <Box
       sx={{
-        height: "5rem",
+        height: { xs: "4.5rem", md: "3rem" },
         alignItems: { xs: "flex-start", md: "center" },
         p: "0.1rem",
         display: "flex",
@@ -31,7 +50,7 @@ export default function ResultHeader() {
               Loading results...
             </Typography>
           </Box>
-        ) : error ? (
+        ) : totalCount == 0 ? (
           <Typography
             variant="body2"
             gutterBottom
@@ -65,6 +84,7 @@ export default function ResultHeader() {
         <Box>
           {/* Share */}
           <IconButton
+            onClick={handleShare}
             size="small"
             aria-label="copy"
             sx={{

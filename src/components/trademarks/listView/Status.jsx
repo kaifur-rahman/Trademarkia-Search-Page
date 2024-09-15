@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import SyncIcon from "@mui/icons-material/Sync";
+import Typography from "@mui/material/Typography";
+import { colorScheme } from "../../../constants/colorScheme";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
-import { colorScheme } from "../../../constants/colorScheme";
 
 // Helper function to format date
 const formatDate = (dateString) => {

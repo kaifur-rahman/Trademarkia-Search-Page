@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useContext } from "react";
 import { SearchContext } from "../contexts/SearchContext";
 import { colorScheme } from "../../constants/colorScheme";
 
@@ -34,7 +33,7 @@ function SearchSuggestion({ query }) {
 
   // Handle when a suggestion is clicked
   const handleSuggestionClick = (newQuery) => {
-    updateFilters("input_query", newQuery);
+    updateFilters("input_query", newQuery, false);
   };
 
   // Generate search suggestions

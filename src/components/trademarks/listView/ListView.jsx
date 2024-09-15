@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
 import Mark from "./Mark";
-import Details from "./Details";
 import Status from "./Status";
+import Details from "./Details";
 import Box from "@mui/material/Box";
 import Description from "./Description";
+import Paper from "@mui/material/Paper";
+import { DataGrid } from "@mui/x-data-grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SearchContext } from "../../contexts/SearchContext";
 
@@ -154,7 +154,7 @@ export default function ListView() {
   }));
 
   return (
-    <Paper sx={{ width: "100%" }}>
+    <Paper sx={{ width: "100%", boxShadow: "none" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -163,7 +163,7 @@ export default function ListView() {
         disableSelectionOnClick
         getRowHeight={() => 140}
         sx={{
-          border: 0,
+          border: "none!important",
           "& .MuiDataGrid-row": {
             cursor: "pointer",
             "&:hover": {
@@ -190,13 +190,16 @@ export default function ListView() {
             fontWeight: 600,
           },
           "& .MuiDataGrid-root": {
-            border: "none",
+            border: "none!important",
           },
           "& .MuiDataGrid-viewport": {
-            border: "none",
+            border: "none!important",
           },
           "& .MuiDataGrid-columnHeadersInner": {
             borderBottom: "none",
+          },
+          "& .MuiDataGrid-main": {
+            border: "none!important",
           },
           mb: "2rem",
         }}

@@ -13,6 +13,7 @@ function Status() {
   const handleClick = (status) => {
     if (status === "all") {
       updateFilters("status", []);
+      
     } else {
       updateFilters("status", [status]);
     }

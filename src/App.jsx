@@ -1,11 +1,15 @@
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Template from "./pages/Template";
-
+import { SearchProvider } from "./components/contexts/SearchContext";
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: <Template />,
+    element: (
+      <SearchProvider>
+        <Template />
+      </SearchProvider>
+    ),
   },
 ]);
 

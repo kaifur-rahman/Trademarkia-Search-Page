@@ -1,10 +1,12 @@
 import { useContext, useState, useCallback, useEffect } from "react";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
+import SearchIcon from "@mui/icons-material/Search";
+
+
 import { colorScheme } from "../../constants/colorScheme";
 import { SearchContext } from "../contexts/SearchContext";
 import debounce from "lodash/debounce";
@@ -21,7 +23,7 @@ function Searchbox() {
   // Debounced function to update query in the context
   const debouncedUpdateQuery = useCallback(
     debounce((newQuery) => {
-      updateFilters("input_query", newQuery);
+      updateFilters("input_query", newQuery, true); // This will reset other filters
     }, 500),
     []
   );
@@ -33,7 +35,7 @@ function Searchbox() {
   };
 
   const handleSearch = () => {
-    updateFilters("input_query", query);
+    updateFilters("input_query", query, true);
   };
 
   return (
@@ -41,6 +43,7 @@ function Searchbox() {
       <Grid item xs={10} md={10}>
         <TextField
           id="searchbar"
+          required
           variant="outlined"
           size="small"
           fullWidth

@@ -1,10 +1,10 @@
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import SearchSuggestion from "../searchSuggestion/SearchSuggestion";
-import ListView from "./listView/ListView";
 import Filter from "../filters/Filter";
-import { useContext } from "react";
+import ListView from "./listView/ListView";
 import { SearchContext } from "../contexts/SearchContext";
+import SearchSuggestion from "../searchSuggestion/SearchSuggestion";
 
 function Trademarks() {
   const { filters } = useContext(SearchContext);

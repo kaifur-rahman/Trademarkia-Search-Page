@@ -1,16 +1,33 @@
-import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
-  const [filters, setFilters] = useState({
-    input_query: "check",
-    status: [],
-    owners: [],
-    attorneys: [],
-    law_firms: [],
-  });
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Function to deserialize filters from the URL
+  const deserializeFilters = (search) => {
+    const params = new URLSearchParams(search);
+    return {
+      input_query: params.get("input_query") || "nike",
+      status: params.get("status") ? params.get("status").split(",") : [],
+      owners: params.get("owners") ? params.get("owners").split(",") : [],
+      attorneys: params.get("attorneys")
+        ? params.get("attorneys").split(",")
+        : [],
+      law_firms: params.get("law_firms")
+        ? params.get("law_firms").split(",")
+        : [],
+    };
+  };
+
+  // Initialize filters from URL params instead of default state
+  const [filters, setFilters] = useState(() =>
+    deserializeFilters(location.search)
+  );
 
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -19,26 +36,63 @@ export const SearchProvider = ({ children }) => {
   const [lawFirmList, setLawFirmList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const API_URL = "https://vit-tm-task.api.trademarkia.app/api/v3/us";
 
-  // Function to update filters
-  const updateFilters = (filterType, value) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterType]: value,
-    }));
+  // Function to update filters on the basis of reset feature
+  const updateFilters = (filterType, value, resetOtherFilters = false) => {
+    setFilters((prevFilters) => {
+      //  reset other filters except the current one
+      if (resetOtherFilters) {
+        return {
+          input_query:
+            filterType === "input_query" ? value : prevFilters.input_query,
+          status: filterType === "status" ? value : [],
+          owners: filterType === "owners" ? value : [],
+          attorneys: filterType === "attorneys" ? value : [],
+          law_firms: filterType === "law_firms" ? value : [],
+        };
+      }
+
+      // Otherwise, just update the specific filter
+      return {
+        ...prevFilters,
+        [filterType]: value,
+      };
+    });
   };
 
-  // Function to make the API call based on filters
-  const fetchData = async () => {
+  // Serialize filters to URL parameters
+  const serializeFilters = (filters) => {
+    const queryParams = new URLSearchParams();
+    Object.keys(filters).forEach((key) => {
+      if (Array.isArray(filters[key])) {
+        queryParams.set(key, filters[key].join(","));
+      } else {
+        queryParams.set(key, filters[key]);
+      }
+    });
+    return queryParams.toString();
+  };
+
+  // Update the URL whenever filters change
+  useEffect(() => {
+    const currentParams = new URLSearchParams(location.search).toString();
+    const serializedFilters = serializeFilters(filters);
+
+    if (serializedFilters !== currentParams) {
+      navigate(`${location.pathname}?${serializedFilters}`, { replace: true });
+    }
+  }, [filters, navigate, location.pathname, location.search]);
+
+  // Fetch data from API based on filters
+  const fetchData = async (appliedFilters) => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.post(
         API_URL,
         {
-          ...filters,
+          ...appliedFilters,
           page: 1,
           rows: 10,
           sort_order: "desc",
@@ -52,18 +106,19 @@ export const SearchProvider = ({ children }) => {
         }
       );
 
-      // Check if response status is 404 or no results found
       if (response.status === 404 || response.data.msg === "not found") {
-        setError("No results found");
         setData([]);
         setTotalCount(0);
         setOwnerList([]);
         setLawFirmList([]);
         setAttorneyList([]);
+        setError(null);
       } else {
-        setData(response.data.body.hits.hits);
+        const responseData = response.data.body.hits.hits;
         const aggregations = response.data.body.aggregations;
+        setData(responseData);
         setTotalCount(response.data.body.hits.total.value);
+
         if (aggregations) {
           setOwnerList(aggregations.current_owners.buckets || []);
           setLawFirmList(aggregations.law_firms.buckets || []);
@@ -71,28 +126,42 @@ export const SearchProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setError("No results found.");
-        setData([]); // Ensure data is reset
+      // Only set error if it's not a 404
+      if (error.response?.status !== 404) {
+        setError("An error occurred while fetching data.");
+      } else {
+        setData([]);
         setTotalCount(0);
         setOwnerList([]);
         setLawFirmList([]);
         setAttorneyList([]);
-      } else {
-        setError("An error occurred while fetching data.");
+        setError(null);
       }
-      console.error("Error fetching data: ", error);
+      console.error(
+        "Error fetching data: ",
+        error.response?.data || error.message
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch data whenever filters change
+  // Fetch data whenever filters change, but only after URL filters are applied
   useEffect(() => {
-    fetchData();
+    if (filters) {
+      fetchData(filters);
+    }
   }, [filters]);
 
-  // Update document title dynamically based on search results and errors
+  // Ensure the filters are deserialized from the URL on component mount
+  useEffect(() => {
+    const initialFilters = deserializeFilters(location.search);
+    if (JSON.stringify(initialFilters) !== JSON.stringify(filters)) {
+      setFilters(initialFilters); // Only update if different
+    }
+  }, [location.search]);
+
+  // Dynamic document title updates based on error, results count, and filters
   useEffect(() => {
     if (error) {
       document.title = `No results found for "${filters.input_query}" | Trademarkia`;
