@@ -1,6 +1,6 @@
 # Trademark Search Application
 
-<p>This project is a replication of the <b>Trademarkia search page</b> built with <b>React.js</b> using Vite as the build tool. It allows users to search for trademarks using various filters like owner, law firm, attorney, and status. The UI adheres to the Figma design provided and dynamically fetches data from the given APIs based on user queries.</p>
+<p>This project is a replication of the <b>Trademarkia search page</b> built with <b>React.js</b> and powered by Vite. It allows users to search for trademarks using various filters like owner, law firm, attorney, and status. It provides users with persistent search states for easy sharing, debounced search functionality to minimize API calls, and a fully responsive design that adheres to the provided Figma design. The application ensures smooth performance and user-friendly navigation with dynamic filtering and detailed search results.</p>
 
 ---
 
@@ -36,6 +36,8 @@
   <li><b>Loading States:</b> While fetching data, a loader is displayed.</li>
   <li><b>Dynamic Results:</b> Trademarks are displayed dynamically using MUI's DataGrid.</li>
   <li><b>Responsive Design:</b> The layout is fully responsive and adapts to different screen sizes.</li>
+  <li><b>Persistent Sharing (Bonus*):</b> Users can share or bookmark search states with filters and query parameters for easy access.</li>
+  <li><b>Search Suggestions:</b> Relevant suggestions are provided when no results are found, guiding the user for better searches.</li>
 </ul>
 
 ---
